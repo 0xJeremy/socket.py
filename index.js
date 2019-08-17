@@ -1,65 +1,73 @@
-module.exports = function(path = '/tmp/node-python-sock', open=true) {
-    var net = require('net');
-    var fs = require('fs');
-    var socketpath = path;
-    var socketopen = false;
-    var msgBuffer = ''
+'use strict'
 
+var Emitter = require('events').EventEmitter;
+var emit = Emitter.prototype.emit;
 
-    var server = (socket) => {
+function Socket(path = '/tmp/node-python-sock', open=true) {
+    this.net = require('net');
+    this.fs = require('fs');
+    this.socketpath = path;
+    this.socketopen = false;
+    this.msgBuffer = '';
+
+    this.server = net.createServer((socket) => {
         emit('connected');
-        socketopen = true;
-    };
+        this.socketopen = true;
+    });
 
     /////////////////////
     /// SERVER EVENTS ///
     /////////////////////
 
-    server.on('data', (bytes) => {
+    this.server.on('data', (bytes) => {
         emit('dataString', bytes.toString());
         emit('dataRaw', bytes);
-        msgBuffer += bytes.toString();
+        this.msgBuffer += bytes.toString();
         try {
-            jsonData = JSON.parse(msgBuffer);
+            var jsonData = JSON.parse(msgBuffer);
             emit('dataJSON', jsonData);
-            msgBuffer = '';
-        }catch(err) {}
+            this.msgBuffer = '';
+        }catch(err) {};
     });
 
-    server.on('end', () => {
+    this.server.on('end', () => {
         emit('disconnected');
-        socketopen = false
+        socketopen = false;
     });
 
-    server.on('connect', () => {
+    this.server.on('connect', () => {
         emit('connected');
-    )};
+    });
 
-    server.on('error' (err) => {
-        emit('error', err)
+    this.server.on('error', (err) => {
+        emit('error', err);
     });
 
     //////////////////////////
     /// SOCKET INFORMATION ///
     //////////////////////////
 
-    var getAddress = function() {
-        return server.address();
+    this.getAddress = function() {
+        return this.server.address();
     };
 
-    var openSocket = function() {
+    this.openSocket = function() {
         fs.unlink(
-            socketpath,
-            () => net.createServer(server).listen(socketpath)
+            this.socketpath,
+            () => this.server.listen(this.socketpath)
         );
     }
 
-    var isOpen = function() {
-        return socketopen;
+    this.isOpen = function() {
+        return this.socketopen;
     }
 
     if(open) {
-        openSocket();
+        this.openSocket();
     };
 
 }
+
+Socket.prototype.__proto__ = Emitter.prototype;
+
+module.exports = exports = new Socket();
