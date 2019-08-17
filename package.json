@@ -1,0 +1,24 @@
+{
+  "name": "socket.py",
+  "version": "1.0.0",
+  "description": "A lightweight Node.js ↔ Python data socket",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "https://github.com/0xJeremy/socket.py",
+  "keywords": [
+    "Python",
+    "Socket",
+    "Data-Socket"
+  ],
+  "author": {
+    "name": "Jeremy Kanovsky",
+    "url": "https://jeremykanovsky.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "net": "1.0.2"
+  }
+}
