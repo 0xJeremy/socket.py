@@ -1,0 +1,5 @@
+setup.py
+socket.py.egg-info/PKG-INFO
+socket.py.egg-info/SOURCES.txt
+socket.py.egg-info/dependency_links.txt
+socket.py.egg-info/top_level.txt
