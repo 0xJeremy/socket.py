@@ -4,7 +4,7 @@
   "description": "A lightweight Node.js ↔ Python data socket",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --exit"
   },
   "repository": "https://github.com/0xJeremy/socket.py",
   "keywords": [

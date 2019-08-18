@@ -10,6 +10,7 @@ function Socket(path = '/tmp/node-python-sock', open=true) {
     this.socketpath = path;
     this.socketopen = false;
     this.msgBuffer = '';
+    this.lastMsg = '';
     this.listener = null
 
     this.server = this.net.createServer((socket) => {
@@ -22,12 +23,16 @@ function Socket(path = '/tmp/node-python-sock', open=true) {
         /////////////////////
 
         socket.on('data', (bytes) => {
-            this.emit('dataString', bytes.toString());
-            this.emit('dataRaw', bytes);
+            this.emit('data', bytes)
             this.msgBuffer += bytes.toString();
             try {
                 var jsonData = JSON.parse(msgBuffer);
-                this.emit('dataJSON', jsonData);
+                switch(jsonData['type']) {
+                    case('raw'): this.emit('dataRaw', jsonData['data']); break;
+                    case('string'): this.emit('dataString', jsonData['data']); break;
+                    case('json'): this.emit('dataJson', jsonData['data']);
+                }
+                this.lastMsg = jsonData['data'];
                 this.msgBuffer = '';
             }catch(err) {};
         });
@@ -62,7 +67,7 @@ function Socket(path = '/tmp/node-python-sock', open=true) {
     }
 
     this.write = function(data) {
-        if(this.isOpen()) {this.listener.write(data)}
+        if(this.isOpen()) {this.listener.write({data})}
         else {throw 'Socket not connected'}
     }
 
@@ -73,6 +78,10 @@ function Socket(path = '/tmp/node-python-sock', open=true) {
 
     this.getSocket = function() {
         return this.listener;
+    }
+
+    this.lastData = function() {
+        return this.lastMsg;
     }
 
     if(open) {
