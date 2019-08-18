@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(
-    name="socket.py",
+    name="NodeSocket",
     version="0.1.0",
     author="Jeremy Kanovsky",
     author_email="kanovsky.jeremy@gmail.com",

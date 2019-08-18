@@ -1,7 +1,7 @@
 import socket
 from json import dumps as stringToJSON
 
-class Socket():
+class NodeSocket():
 	def __init__(self, path='/tmp/node-python-sock', openSocket=True):
 		self.sendHistory = []
 		self.path = path

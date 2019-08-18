@@ -1,0 +1,5 @@
+setup.py
+NodeSocket.egg-info/PKG-INFO
+NodeSocket.egg-info/SOURCES.txt
+NodeSocket.egg-info/dependency_links.txt
+NodeSocket.egg-info/top_level.txt
