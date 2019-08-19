@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="NodeSocket",
-    version="0.1.0",
+    version="0.2.0",
     author="Jeremy Kanovsky",
     author_email="kanovsky.jeremy@gmail.com",
     description="A lightweight Node.js ↔ Python data socket",
