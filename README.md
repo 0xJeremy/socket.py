@@ -42,7 +42,7 @@ This library was designed to lower the barrier to entry as much as possible. As 
 ## How to use — Node.js
 
 The following example imports and creates the data socket in Node.js, and then sets up a listener event.
-```
+```javascript
 const socket = require('socket.py');
 
 socket.on('dataJson', (data) => {
@@ -51,7 +51,7 @@ socket.on('dataJson', (data) => {
 ```
 
 The following events are emitted from socket.py:
-```
+```javascript
 socket.on('dataRaw', (data) => {
 	/* this event will relay raw data from python */
 });
@@ -66,7 +66,7 @@ socket.on('dataJson', (data) => {
 ```
 
 For advanced users, there is also
-```
+```javascript
 socket.on('data', (data) => {
 	/* this event will emit the raw bytes received over the data socket */
 });
@@ -92,7 +92,7 @@ lastData() => returns the last piece of data received over the socket (does not 
 ## How to use — Python
 
 The following is a simple example of how to use NodeSocket in Python:
-```
+```python
 from NodeSocket import NodeSocket
 
 socket = NodeSocket()

@@ -1,4 +1,7 @@
+README.md
 setup.py
+NodeSocket/NodeSocket.py
+NodeSocket/__init__.py
 NodeSocket.egg-info/PKG-INFO
 NodeSocket.egg-info/SOURCES.txt
 NodeSocket.egg-info/dependency_links.txt
