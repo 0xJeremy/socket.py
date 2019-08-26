@@ -10,8 +10,8 @@ function Socket(path = '/tmp/node-python-sock', open=true) {
     this.socketpath = path;
     this.socketopen = false;
     this.msgBuffer = '';
-    this.lastMsg = '';
-    this.listener = null
+    this.listener = null;
+    this.channels = {}
 
     this.server = this.net.createServer((socket) => {
         this.listener = socket;
@@ -23,16 +23,11 @@ function Socket(path = '/tmp/node-python-sock', open=true) {
         /////////////////////
 
         socket.on('data', (bytes) => {
-            this.emit('data', bytes)
             this.msgBuffer += bytes.toString();
             try {
-                var jsonData = JSON.parse(msgBuffer);
-                switch(jsonData['type']) {
-                    case('raw'): this.emit('dataRaw', jsonData['data']); break;
-                    case('string'): this.emit('dataString', jsonData['data']); break;
-                    case('json'): this.emit('dataJson', jsonData['data']);
-                }
-                this.lastMsg = jsonData['data'];
+                var jsonData = JSON.parse(this.msgBuffer);
+                this.emit(jsonData['type'], jsonData['data']);
+                this.channels[jsonData['type']] = jsonData['data']
                 this.msgBuffer = '';
             }catch(err) {};
         });
@@ -66,9 +61,19 @@ function Socket(path = '/tmp/node-python-sock', open=true) {
         return this.socketopen;
     }
 
-    this.write = function(data) {
-        if(this.isOpen()) {this.listener.write({data})}
+    this.write = function(dataType, data) {
+        if(this.isOpen()) {
+            var msg = {
+                'type': dataType,
+                'data': data
+            }
+            this.listener.write(JSON.stringify(msg))
+        }
         else {throw 'Socket not connected'}
+    }
+
+    this.get = function(dataType) {
+        return this.channels[dataType];
     }
 
     this.pipe = function(data) {
@@ -78,10 +83,6 @@ function Socket(path = '/tmp/node-python-sock', open=true) {
 
     this.getSocket = function() {
         return this.listener;
-    }
-
-    this.lastData = function() {
-        return this.lastMsg;
     }
 
     if(open) {

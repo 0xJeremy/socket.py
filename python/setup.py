@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="NodeSocket",
-    version="0.2.1",
+    version="0.3.0",
     author="Jeremy Kanovsky",
     author_email="kanovsky.jeremy@gmail.com",
     description="A lightweight Node.js ↔ Python data socket",

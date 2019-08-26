@@ -35,7 +35,7 @@ Unless specifically disabled, this library will automatically connect the Node.j
 
 An event is triggered in the Node.js server when a Python process disconnects. The library will also keep track of the state of the socket connection and allow querying of the connection status.
 
-### Easy of use
+### Easy to use
 
 This library was designed to lower the barrier to entry as much as possible. As such there are built in functions that can send and receive strings, JSON data, and raw binary data.
 
@@ -45,32 +45,17 @@ The following example imports and creates the data socket in Node.js, and then s
 ```javascript
 const socket = require('socket.py');
 
-socket.on('dataJson', (data) => {
+var channel = 'channel_1';
+
+socket.write(channel, 'Hello from Node.js!');
+
+socket.on('channel', (data) => {
 	/* your code here */
 });
 ```
 
-The following events are emitted from socket.py:
-```javascript
-socket.on('dataRaw', (data) => {
-	/* this event will relay raw data from python */
-});
-
-socket.on('dataString', (data) => {
-	/* this event will relay a string from python */
-});
-
-socket.on('dataJson', (data) => {
-	/* this event will relay a JSON object from python */
-});
-```
-
-For advanced users, there is also
-```javascript
-socket.on('data', (data) => {
-	/* this event will emit the raw bytes received over the data socket */
-});
-```
+Channels can be written to and read from. Channels do not need to be declared by either Node.js or Python ahead of time.
+Channels do not even need to match between the processes. When the `write` command is called, a channel name and a message must be passed. This message can be of any JSON supported data type. When a message is received from Python, the channel it was passed through will emit the data.
 
 There are also the following methods exported as part of socket.py:
 ```
@@ -80,13 +65,13 @@ openSocket() => will open the data socket (called automatically, not necessary t
 
 isOpen() => will return the state of the socket (returns a boolean)
 
-write(msg) => write to Python
+write(channel, msg) => write to Python
 
-pipe(msg) => pipe data to python
+pipe(msg) => pipe data to python (WARNING: This function is not fully tested)
 
 getSocket() => returns the socket object itself (for advanced users only)
 
-lastData() => returns the last piece of data received over the socket (does not include data emitted by the 'data' event)
+get(channel) => returns the last piece of data received over the on a specified channel
 ```
 
 ## How to use — Python
@@ -97,25 +82,22 @@ from NodeSocket import NodeSocket
 
 socket = NodeSocket()
 
-socket.sendRaw('NodeSocket Test!')
-response = socket.lastData()
+channel = 'channel_1'
+
+socket.write(channel, 'Hello from Python!')
+
+response = socket.get(channel)
 ```
 
 Here are the functions accessible from the NodeSocket library:
 ```
-recv(size) => will cause NodeSocket to read from the data socket, and will return any data in the socket (size, in bytes, defaults to 256)
-
-lastData() => will return the last piece of data received from Node.js
-
-sendRaw(msg) => will send raw data to Node.js (matches the 'dataRaw' event in socket.py)
-
-sendJson(msg) => will send a Json object to Node.js (matches the 'dataJson' event in socket.py)
-
-sendString(msg) => will send a string to Node.js (matches the 'dataString' event in socket.py)
-
 open() => will open the data socket (called by default, do not call unless the connection is interrupted)
 
 close() => will close the data socket
 
 isOpen() => returns if the socket is open (returns a boolean)
+
+get(channel) => will return the most recent data to a specific channel
 ```
+
+The socket is read from automatically and runs on a separate thread. When the socket is created it will block until the socket is open, but will otherwise not interrupt program flow.

@@ -1,6 +1,6 @@
 {
   "name": "socket.py",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A lightweight Node.js ↔ Python data socket",
   "main": "index.js",
   "scripts": {
