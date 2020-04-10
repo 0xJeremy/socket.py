@@ -1,5 +1,7 @@
 # socket.py
 
+# THIS PROJECT IS DEPRECIATED. USE [SOCKET.ENGINE](https://github.com/0xJeremy/socket.engine) INSTEAD.
+
 ## Installation
 
 Node.js installation:
@@ -80,7 +82,7 @@ The following is a simple example of how to use NodeSocket in Python:
 ```python
 from NodeSocket import NodeSocket
 
-socket = NodeSocket()
+socket = NodeSocket.NodeSocket()
 
 channel = 'channel_1'
 

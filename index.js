@@ -26,6 +26,10 @@ function Socket(path = '/tmp/node-python-sock', open=true) {
             this.msgBuffer += bytes.toString();
             try {
                 var jsonData = JSON.parse(this.msgBuffer);
+                if(jsonData['stop'] != undefined) {
+                    this.listener.write(JSON.stringify(jsonData))
+                    return;
+                }
                 this.emit(jsonData['type'], jsonData['data']);
                 this.channels[jsonData['type']] = jsonData['data']
                 this.msgBuffer = '';

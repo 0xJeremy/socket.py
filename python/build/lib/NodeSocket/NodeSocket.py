@@ -9,6 +9,7 @@ class NodeSocket(Thread):
 		self.path = path
 		self.data = ''
 		self.channels = {}
+		self.go = True
 		if openSocket:
 			self.open()
 		self.start()
@@ -25,7 +26,7 @@ class NodeSocket(Thread):
 	def run(self, size=256):
 		if self.socketOpen:
 			tmp = ''
-			while True:
+			while self.go:
 				tmp += self.client.recv(size).decode().encode('utf-8')
 				try:
 					msg = jsonToDict(tmp)
@@ -34,6 +35,7 @@ class NodeSocket(Thread):
 					self.channels[msg['type']] = msg['data']
 					tmp = ''
 				except: continue
+		return
 
 	def registerChannel(self, channel):
 		self.channels[channel] = None
@@ -53,3 +55,8 @@ class NodeSocket(Thread):
 
 	def isOpen(self):
 		return self.socketOpen
+
+	def exit(self):
+		self.go = False
+		msg = {'stop': True}
+		self.client.send(dictToJson(msg).encode())

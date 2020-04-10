@@ -1,12 +1,14 @@
 Metadata-Version: 2.1
 Name: NodeSocket
-Version: 0.3.0
+Version: 0.3.2
 Summary: A lightweight Node.js ↔ Python data socket
 Home-page: https://github.com/0xJeremy/socket.py
 Author: Jeremy Kanovsky
 Author-email: kanovsky.jeremy@gmail.com
 License: UNKNOWN
 Description: # socket.py
+        
+        # THIS PROJECT IS DEPRECIATED. USE [SOCKET.ENGINE](https://github.com/0xJeremy/socket.engine) INSTEAD.
         
         ## Installation
         
@@ -88,7 +90,7 @@ Description: # socket.py
         ```python
         from NodeSocket import NodeSocket
         
-        socket = NodeSocket()
+        socket = NodeSocket.NodeSocket()
         
         channel = 'channel_1'
         
